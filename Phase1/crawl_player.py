@@ -11,8 +11,9 @@ from bs4 import BeautifulSoup
 import numpy as np
 
 
-def data_of_players(url, players_datas):      
-    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+def data_of_players(url, players_datas): 
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", "accept-language": "en-US,en;q=0.9"}     
+    page = requests.get(url, headers=headers)
     soup = BeautifulSoup(page.content, "html.parser")
     res = {} 
 
@@ -117,7 +118,9 @@ def data_of_players(url, players_datas):
             agent = temp[i+1].text.strip()
         #Getting Foot
         elif "Foot" in temp[i].text:
-            foot = temp[i+1].text.strip()
+            span = temp[i+1].text.strip()
+            if span == 'right' or span == 'left' or span == 'both':
+                foot = span
         #Getting Joined
         elif "Joined" in temp[i].text:
             contract_Joined = temp[i+1].text.strip()
@@ -140,12 +143,13 @@ def data_of_players(url, players_datas):
     res["height"] = height
     res["current_club"] = current_club
     res["date_of_last_contract"] = date_of_last_contract
-
+ 
     return res
 
 
-def players_transfer_table(url):       
-    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+def players_transfer_table(url):  
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", "accept-language": "en-US,en;q=0.9"}     
+    page = requests.get(url, headers=headers)
     soup = BeautifulSoup(page.content, "html.parser")
 
     #Getting Transfer Data
@@ -165,8 +169,9 @@ def players_transfer_table(url):
         pass
 
 
-def player_stats_table(url):
-    page = requests.get(performance_link, headers={'User-Agent': 'Mozilla/5.0'})
+def player_stats_table(url, name):
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", "accept-language": "en-US,en;q=0.9"}     
+    page = requests.get(url, headers=headers)
     soup = BeautifulSoup(page.content, "html.parser")
 
     appearances=np.nan
@@ -229,6 +234,7 @@ players_datas = pd.DataFrame(columns=cols).astype(str)
 
 cols=["player_id", "season", "date", "left", "joined", "mv", "fee"]
 transfer_table = pd.DataFrame(columns=cols).astype(str)
+
 
 for i in range(len(links)):
     #---players_datas
