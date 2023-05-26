@@ -18,6 +18,7 @@ France : 50
 Spain : 157
 URL : https://www.transfermarkt.com/wettbewerbe/national/wettbewerbe/{CountryID}
 """
+headers = {"User-Agent": "Mozilla/3.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", "accept-language": "en-US,en;q=0.9"}     
 
 club = pd.DataFrame([{'CountryID': 189, 'Country': 'England'},
         {'CountryID': 40, 'Country': 'Germany'},
@@ -31,7 +32,8 @@ club_table_league = pd.DataFrame()
 league = []
 for i in range(len(club)):
     url = f"https://www.transfermarkt.com/wettbewerbe/national/wettbewerbe/{club.loc[i,'CountryID']}"
-    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+    page = requests.get(url, headers=headers)
+        
     soup = BeautifulSoup(page.content, 'html.parser')
     league.append(soup.select('.inline-table a')[1].get('title'))
 
@@ -58,7 +60,7 @@ club = club.assign(Club=np.NaN, ClubID=np.NaN, Squad=np.NaN,
 club_table_league['League'] = league
 club_table_league['Season'] = season
 club_table_league = club_table_league.explode('Season').reset_index(drop=True)
-club_table_league = club_table_league.assign(Club=np.NaN, Rank=np.NaN)
+club_table_league = club_table_league.assign(ClubID=np.NaN, Rank=np.NaN)
 
 
 players = pd.DataFrame()
@@ -70,14 +72,14 @@ players.assign(ClubID=np.NaN, Player_name=np.NaN, PlayerID=np.NaN, Player_Market
 
 for league, url in league_urls.items():
     for season in range(2015, 2022):
-        page = requests.get(url + str(season), headers={'User-Agent': 'Mozilla/5.0'})
+        page = requests.get(url + str(season), headers=headers)
         soup = BeautifulSoup(page.content, 'html.parser')
 
-        # add Rank and Club name columns to club_table_league dataFrame
-        top_team = [team.text for team in soup.select("#yw4 .hauptlink a:nth-child(1)")] 
-        club_table_league.loc[(club_table_league['Season'] == season) & (club_table_league['League'] == league), 'Club'] = ';'.join(top_team)
-        club_table_league['Club'] = club_table_league['Club'].str.split(';')
-        club_table_league = club_table_league.explode('Club').reset_index(drop=True)
+        # add Rank and ClubID columns to club_table_league dataFrame
+        top_team = [team.get('href').split('/')[-3] for team in soup.select("#yw4 .hauptlink a:nth-child(1)")] 
+        club_table_league.loc[(club_table_league['Season'] == season) & (club_table_league['League'] == league), 'ClubID'] = ';'.join(top_team)
+        club_table_league['ClubID'] = club_table_league['ClubID'].str.split(';')
+        club_table_league = club_table_league.explode('ClubID').reset_index(drop=True)
         club_table_league.loc[(club_table_league['Season'] == season) & (club_table_league['League'] == league), 'Rank'] = [i + 1 for i in range(len(top_team))]
         
         # get Clubs                                         
@@ -119,7 +121,7 @@ for league, url in league_urls.items():
         club_urls = [link.get("href") for link in soup.select("#yw1 .no-border-links a:nth-child(1)")]
         for club_url in club_urls:
             club_id = club_url.split("/")[-3]
-            club_page = requests.get("https://www.transfermarkt.com" + club_url, headers={'User-Agent': 'Mozilla/5.0'})  
+            club_page = requests.get("https://www.transfermarkt.com" + club_url, headers=headers)                  
             soup2 = BeautifulSoup(club_page.content, "html.parser")
 
             # get all players from the club
@@ -172,7 +174,7 @@ for league, url in league_urls.items():
             if not champoin:
                 continue
             
-            champoin_page = requests.get("https://www.transfermarkt.com" + champoin[0], headers={'User-Agent': 'Mozilla/5.0'})
+            champoin_page = requests.get("https://www.transfermarkt.com" + champoin[0], headers=headers)
             soup3 = BeautifulSoup(champoin_page.content, "html.parser")
             
             champoin_list = [ch.text for ch in soup3.select("td:nth-child(1) , .no-border-links")]
@@ -186,14 +188,14 @@ for league, url in league_urls.items():
             
             club.loc[(club['ClubID'] == club_id) & (club['Season'] == season), 'Club_victories'] = ';'.join(victories)
      
-            
-        print('\t',season, 'Done.')  
+      
+        print('\t',season, 'Done.')
     print(league,'Done.')
 
-   
+
+club = pd.merge(club, club_table_league, on=["League","Season","ClubID"])
 
 club.to_csv('data/club.csv')
-club_table_league.to_csv('data/club_table_league.csv')
 players.to_csv('data/club_players.csv')
 pd.DataFrame(All_Players_Link).drop_duplicates().to_csv("data/players_link.csv", index = False)
 

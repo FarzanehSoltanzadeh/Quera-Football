@@ -271,7 +271,7 @@ for i in range(len(links)):
     name=name.replace(' ','-')
     performance_link=f"https://www.transfermarkt.com/{name}/leistungsdaten/spieler/{id}/plus/0?saison=2021"
 
-    res3 = player_stats_table(performance_link)
+    res3 = player_stats_table(performance_link, name)
     player_stats.append(res3)
 
     print(f'player{i} Done.')
