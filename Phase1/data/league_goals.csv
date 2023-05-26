@@ -1,36 +1,37 @@
 ,League,Season,Goals
-0,England,2015,1026
-1,England,2016,1064
-2,England,2017,1018
-3,England,2018,1072
-4,England,2019,1034
-5,England,2020,1024
-6,England,2021,1071
-7,Spain,2015,1043
-8,Spain,2016,1118
-9,Spain,2017,1024
-10,Spain,2018,983
-11,Spain,2019,942
-12,Spain,2020,953
-13,Spain,2021,951
-14,France,2015,960
-15,France,2016,991
-16,France,2017,1033
-17,France,2018,972
-18,France,2019,704
-19,France,2020,1049
-20,France,2021,1067
-21,Germany,2015,866
-22,Germany,2016,877
-23,Germany,2017,855
-24,Germany,2018,973
-25,Germany,2019,982
-26,Germany,2020,928
-27,Germany,2021,954
-28,Italy,2015,979
-29,Italy,2016,1123
-30,Italy,2017,1017
-31,Italy,2018,1019
-32,Italy,2019,1154
-33,Italy,2020,1163
-34,Italy,2021,1089
+0,Premier League,2015,1026
+1,Premier League,2016,1064
+2,Premier League,2017,1018
+3,Premier League,2018,1072
+4,Premier League,2019,1034
+5,Premier League,2020,1024
+6,Premier League,2021,1071
+7,Bundesliga,2015,866
+8,Bundesliga,2016,877
+9,Bundesliga,2017,855
+10,Bundesliga,2018,973
+11,Bundesliga,2019,982
+12,Bundesliga,2020,928
+13,Bundesliga,2021,954
+14,Serie A,2015,979
+15,Serie A,2016,1123
+16,Serie A,2017,1017
+17,Serie A,2018,1019
+18,Serie A,2019,1154
+19,Serie A,2020,1163
+20,Serie A,2021,1089
+21,Ligue 1,2015,960
+22,Ligue 1,2016,991
+23,Ligue 1,2017,1033
+24,Ligue 1,2018,972
+25,Ligue 1,2019,704
+26,Ligue 1,2020,1049
+27,Ligue 1,2021,1067
+28,LaLiga,2015,1043
+29,LaLiga,2016,1118
+30,LaLiga,2017,1024
+31,LaLiga,2018,983
+32,LaLiga,2019,942
+33,LaLiga,2020,953
+34,LaLiga,2021,951
+
