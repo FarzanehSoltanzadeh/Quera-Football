@@ -158,7 +158,7 @@ for league, url in zip(league_name, league_url):
 
             # add player Market Value to player dataFrame
             player_market_value = [pmv.text for pmv in soup2.select(".rechts.hauptlink")]
-            players.loc[(players['ClubID'] == club_id) & (players['Season'] == season), 'Player_MarketValue'] = player_market_value
+            players.loc[(players['ClubID'] == club_id) & (players['Season'] == season), 'Player_MarketValue'] = player_market_value.replace(' ', '')
             
             # add player possition to player dataFrame
             player_main_possition = [possition.text for possition in soup2.select(".inline-table tr+ tr td")]
